@@ -10,6 +10,7 @@ import com.whut.mapper.ArticleMapper;
 import com.whut.mapper.UserMapper;
 import com.whut.mapper.UserOtmArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,37 +20,43 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private ArticleMapper articleMapper;
-
-    @Autowired
-    private UserOtmArticleMapper userOtmArticleMapper;
-
-    public User getUserById(Integer uid) {
-        return userMapper.selectById(uid);
-    }
-    public User getUserWithArticles(Integer uid) {
-        // 查询用户信息
+    public User doLogin(String username, String password){
         QueryWrapper<User> qw = new QueryWrapper<>();
-        qw.eq("uid", uid);
+        qw.eq("username", username);
+        qw.eq("password", password);
         User user = userMapper.selectOne(qw);
-        if (user != null) {
-            // 查询用户关联的文章信息
-            QueryWrapper<UserOtmArticle> uaqw=new QueryWrapper<>();
-            uaqw.eq("uid", uid);
-            List<UserOtmArticle> userOtmArticles = userOtmArticleMapper.selectList(uaqw);
+        System.out.println(user);
+        return user;
+    }
 
-            // 根据用户关联的文章ID查询文章详情
-            if (!userOtmArticles.isEmpty()) {
-                QueryWrapper<Article> aqw = new QueryWrapper<>();
-                aqw.in("id", userOtmArticles.stream().map(UserOtmArticle::getArticleId).toArray());
-                List<Article> articles = articleMapper.selectList(aqw);
-
-                // 设置用户的文章列表
-                user.setArticles(articles);
+    public boolean doRegister(User user){
+        boolean type = false;
+        if(user!=null){
+            QueryWrapper<User> qw = new QueryWrapper<>();
+            qw.eq("username", user.getUsername());
+            if(userMapper.selectOne(qw) != null){
+                return type;
+            }
+            if(userMapper.insert(user)>0){
+                type = true;
             }
         }
+        return type;
+    }
+    public List<User> getAllUser(){
+        QueryWrapper<User> qw = new QueryWrapper<>();
+        return userMapper.selectList(qw);
+    }
+    public User getUser(Integer uid) {
+        return userMapper.selectById(uid);
+    }
 
-        return user;
+    public boolean deleteUser(Integer uid) {
+        try{
+            userMapper.deleteById(uid);
+            return true;
+        } catch(Exception e){
+            return false;
+        }
     }
 }
