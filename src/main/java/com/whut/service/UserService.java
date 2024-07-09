@@ -1,6 +1,7 @@
 package com.whut.service;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.whut.entity.Article;
@@ -59,4 +60,8 @@ public class UserService {
             return false;
         }
     }
+//    public  Integer tokenToId(){
+//        System.out.println(StpUtil.getTokenInfo().getLoginId());
+//        return Integer.valueOf((String) StpUtil.getTokenInfo().getLoginId());
+//    }
 }

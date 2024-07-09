@@ -9,10 +9,10 @@ import lombok.Data;
 public class Articledynamic{
     @TableId(value="id",type= IdType.AUTO)
     private Integer id;
-    private Integer eye_view;
+    private Integer eyeView;
     private Integer interesting;
     private Integer boring;
-    private Integer comments_count;
+    private Integer commentsCount;
 
     @TableLogic
     private Integer deleted;

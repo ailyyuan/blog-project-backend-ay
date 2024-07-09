@@ -1,6 +1,7 @@
 package com.whut.controller;
 
 import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.util.SaResult;
 import com.alibaba.fastjson.JSONObject;
 import com.whut.entity.Article;
@@ -31,12 +32,11 @@ class UserController {
         System.out.println(password);
         User user=userService.doLogin(username,password);
         if( user!=null ){
-
             StpUtil.login(user.getId());
-            return ResponseEntity.status(HttpStatus.OK).body("Login successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(StpUtil.getTokenInfo().tokenValue);
         }
         else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Data not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("login unsuccessfully");
     }
     @PostMapping("/register")
     public ResponseEntity<String> doRegister(@RequestBody User user) {
@@ -54,6 +54,12 @@ class UserController {
         List<User> userList = userService.getAllUser();
         userList.forEach(User::mark);
         return userList;
+    }
+
+    @GetMapping("/deleteUser")
+    public Boolean deleteUser(){
+        Integer uid = Tool.tokenToId();
+        return userService.deleteUser(uid);
     }
     @GetMapping("/hello")
     public String hello(){

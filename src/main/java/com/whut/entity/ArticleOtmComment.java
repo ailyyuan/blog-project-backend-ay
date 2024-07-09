@@ -10,7 +10,7 @@ public class ArticleOtmComment {
     @TableId(value="id",type= IdType.AUTO)
     private Integer id;
     private Integer aid;
-    private Integer comment_id;
+    private Integer commentId;
 
     @TableLogic
     private Integer deleted;

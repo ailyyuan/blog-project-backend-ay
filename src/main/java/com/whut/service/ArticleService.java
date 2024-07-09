@@ -2,9 +2,11 @@ package com.whut.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.whut.entity.Article;
+import com.whut.entity.Articledynamic;
 import com.whut.entity.User;
 import com.whut.entity.UserOtmArticle;
 import com.whut.mapper.ArticleMapper;
+import com.whut.mapper.ArticledynamicMapper;
 import com.whut.mapper.UserMapper;
 import com.whut.mapper.UserOtmArticleMapper;
 import com.whut.tools.Tool;
@@ -24,6 +26,8 @@ public class ArticleService {
 
     @Autowired
     private UserOtmArticleMapper userOtmArticleMapper;
+    @Autowired
+    private ArticledynamicMapper articleDynamicMapper;
 
     public Article getArticle(Integer id) {
         return articleMapper.selectById(id);
@@ -85,12 +89,29 @@ public class ArticleService {
         }
     }
 
-    public boolean deleteArticle(Integer id) {
-        try{
+    public boolean deleteArticle(Integer uid,Integer id) {
+        if(certifyArticle(uid, id)){
+            QueryWrapper<UserOtmArticle> qw = new QueryWrapper<>();
+            qw.eq("article_id",id);
+            userOtmArticleMapper.delete(qw);
             articleMapper.deleteById(id);
             return true;
-        } catch(Exception e){
+        }else{
             return false;
         }
+    }
+
+    public List<Article> getSearchArticle(String search) {
+        QueryWrapper<Article> qw = new QueryWrapper<>();
+        qw.like("title", search);
+        List<Article> articleList = articleMapper.selectList(qw);
+        System.out.println("searchArticle:"+articleList);
+        return articleList;
+    }
+
+    public Articledynamic getArticledynamic(Integer articleId) {
+        Articledynamic articleDynamic = articleDynamicMapper.selectById(articleId);
+        System.out.println();
+        return articleDynamic;
     }
 }
