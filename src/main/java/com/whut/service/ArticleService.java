@@ -29,6 +29,7 @@ public class ArticleService {
     @Autowired
     private ArticledynamicMapper articleDynamicMapper;
 
+
     public Article getArticle(Integer id) {
         return articleMapper.selectById(id);
     }
@@ -83,6 +84,13 @@ public class ArticleService {
             userOtmArticle.setUid(uid);
             userOtmArticle.setArticleId(article.getId());
             userOtmArticleMapper.insert(userOtmArticle);
+
+            Articledynamic articledynamic = new Articledynamic();
+            articledynamic.setInteresting(0);
+            articledynamic.setBoring(0);
+            articledynamic.setCommentsCount(0);
+            articledynamic.setEyeView(0);
+            articleDynamicMapper.insert(articledynamic);
             return true;
         } else{
             return false;
@@ -113,5 +121,52 @@ public class ArticleService {
         Articledynamic articleDynamic = articleDynamicMapper.selectById(articleId);
         System.out.println();
         return articleDynamic;
+    }
+
+    public void addEyeView(Integer articleId){
+        System.out.println("addEyeView"+articleId);
+        try{
+            Articledynamic articledynamic = articleDynamicMapper.selectById(articleId);
+            articledynamic.setEyeView(articledynamic.getEyeView()+1);
+            articleDynamicMapper.updateById(articledynamic);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addInteresting(Integer articleId){
+        System.out.println("addInteresting"+articleId);
+        try{
+            Articledynamic articledynamic = articleDynamicMapper.selectById(articleId);
+            articledynamic.setInteresting(articledynamic.getInteresting()+1);
+            articleDynamicMapper.updateById(articledynamic);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void addBoring(Integer articleId){
+        System.out.println("addBoring"+articleId);
+        try{
+            Articledynamic articledynamic = articleDynamicMapper.selectById(articleId);
+            articledynamic.setBoring(articledynamic.getBoring()+1);
+            articleDynamicMapper.updateById(articledynamic);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addComment(Integer articleId){
+        System.out.println("addComment"+articleId);
+        try{
+            Articledynamic articledynamic = articleDynamicMapper.selectById(articleId);
+            articledynamic.setCommentsCount(articledynamic.getCommentsCount()+1);
+            articleDynamicMapper.updateById(articledynamic);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteArticledynamic(Integer id) {
+        articleDynamicMapper.deleteById(id);
     }
 }

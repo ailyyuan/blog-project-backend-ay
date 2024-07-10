@@ -73,6 +73,7 @@ public class CommentService {
             articleOtmCommentMapper.insert(articleOtmComment);
             System.out.println(articleOtmComment);
 
+            articleService.addComment(articleId);
             return true;
         }
         return false;

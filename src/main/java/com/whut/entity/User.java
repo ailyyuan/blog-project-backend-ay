@@ -25,7 +25,6 @@ public class User {
     private List<Article> articles;
 
     public void mark(){
-        this.id=null;
         this.password=null;
     }
 }

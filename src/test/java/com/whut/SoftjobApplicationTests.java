@@ -61,7 +61,7 @@ class SoftjobApplicationTests {
         // Create a fixed Comment object for testing
         Comment comment = new Comment();
         comment.setContext("This is a test comment.");
-        comment.setParentId(1); // Assuming parentId needs to be set
+        comment.setParentId(0); // Assuming parentId needs to be set
         comment.setResponseId(0); // Assuming responseId needs to be set
         Date date = new Date();
         Timestamp time = new Timestamp(date.getTime());
@@ -79,6 +79,11 @@ class SoftjobApplicationTests {
         System.out.println(articleService.getArticledynamic(1));
     }
 
+    @Test
+    public void testGetArticle(){
+        articleService.addEyeView(1);
+        System.out.println(articleService.getArticle(1));
+    }
 }
 
 

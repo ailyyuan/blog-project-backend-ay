@@ -28,6 +28,7 @@ public class ArticleController {
     @GetMapping("/getArticle")
     public Article getArticle(Integer articleId){
         System.out.println("请求发起uid： "+StpUtil.getLoginId());
+        articleService.addEyeView(articleId);
         return articleService.getArticle(articleId);
     }
     //更新和添加验证,鉴权
@@ -42,6 +43,7 @@ public class ArticleController {
     @GetMapping("/deleteArticle")
     public boolean deleteArticle(Integer id){
         Integer uid = Tool.tokenToId();
+        articleService.deleteArticledynamic(id);
         return articleService.deleteArticle(uid, id);
     }
     @PostMapping("/updateArticle")
@@ -68,5 +70,15 @@ public class ArticleController {
     @GetMapping("/getArticledynamic")
     public Articledynamic getArticledynamic(Integer articleId){
         return articleService.getArticledynamic(articleId);
+    }
+
+    @GetMapping("/addInteresting")
+    public void addInteresting(Integer articleId){
+        articleService.addInteresting(articleId);
+    }
+
+    @GetMapping("/addBoring")
+    public void addBoring(Integer articleId){
+        articleService.addBoring(articleId);
     }
 }
