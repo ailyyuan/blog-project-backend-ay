@@ -41,15 +41,15 @@ public class UserService {
         String code = CodeGeneratorUtil.generateCode(6);
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
         //设置一个html邮件信息
-        helper.setText("<p style='color: blue'>三秦锅，你在搞什么飞机！你的验证码为：" + code + "(有效期为一分钟)</p>", true);
+        helper.setText("<p style='color: blue'>你的验证码为：" + code + "(有效期为一分钟)</p>", true);
         //设置邮件主题名
         helper.setSubject("FlowerPotNet验证码----验证码");
         //发给谁-》邮箱地址
         helper.setTo(email);
         //谁发的-》发送人邮箱
-        helper.setFrom("2233085367 @qq.com");
-        //将邮箱验证码以邮件地址为key存入redis,1分钟过期
-        redisTemplate.opsForValue().set(email, code, Duration.ofMinutes(1));
+        helper.setFrom("2233085367@qq.com");
+        //将邮箱验证码以邮件地址为key存入redis,10分钟过期
+        redisTemplate.opsForValue().set(email, code, Duration.ofMinutes(10));
         mailSender.send(mimeMessage);
         return true;
     }
@@ -96,11 +96,13 @@ public class UserService {
         }
     }
 
-    public boolean changPassword(String username, String newPassword) {
-        return true;
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        User user = doLogin(username , oldPassword);
+        if(user!=null){
+            user.setPassword(newPassword);
+            userMapper.updateById(user);
+            return true;
+        }
+        return false;
     }
-//    public  Integer tokenToId(){
-//        System.out.println(StpUtil.getTokenInfo().getLoginId());
-//        return Integer.valueOf((String) StpUtil.getTokenInfo().getLoginId());
-//    }
 }

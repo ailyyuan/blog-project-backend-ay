@@ -37,7 +37,7 @@ class SoftjobApplicationTests {
 
     @Test
     public void testGetAllArticleComment() {
-        commentService.getAllArticleComments(1);
+        commentService.getAllArticleComments(4);
     }
 
     @Test
@@ -83,6 +83,11 @@ class SoftjobApplicationTests {
     public void testGetArticle(){
         articleService.addEyeView(1);
         System.out.println(articleService.getArticle(1));
+    }
+
+    @Test
+    public void testChangePassword(){
+        System.out.println(userService.changePassword("1234","1234", "3456"));
     }
 }
 

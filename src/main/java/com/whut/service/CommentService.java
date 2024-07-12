@@ -48,6 +48,12 @@ public class CommentService {
                 QueryWrapper<Comment> aqw = new QueryWrapper<>();
                 aqw.in("id", articleOtmCommentList.stream().map(ArticleOtmComment::getCommentId).toArray());
                 List<Comment> comments = commentMapper.selectList(aqw);
+                for(Comment comment : comments){
+                    QueryWrapper<UserOtmComment> uOCqw = new QueryWrapper<>();
+                    uOCqw.eq("cid", comment.getId());
+                    UserOtmComment userOtmComment = userOtmCommentMapper.selectOne(uOCqw);
+                    comment.setUid(userOtmComment.getUid());
+                }
                 System.out.println(comments);
                 return comments;
             }

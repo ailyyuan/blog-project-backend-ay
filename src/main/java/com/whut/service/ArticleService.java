@@ -58,9 +58,11 @@ public class ArticleService {
 
     public  boolean certifyArticle(Integer uid, Integer id){
         List<Article> articleList = this.getUserWithArticles(uid);
-        for(Article article : articleList){
-            if (Objects.equals(article.getId(), id)){
-                return true;
+        if(articleList !=null){
+            for(Article article : articleList){
+                if (Objects.equals(article.getId(), id)){
+                    return true;
+                }
             }
         }
         return false;
@@ -168,5 +170,20 @@ public class ArticleService {
 
     public void deleteArticledynamic(Integer id) {
         articleDynamicMapper.deleteById(id);
+    }
+
+    public List<Article> getAllArticles() {
+        QueryWrapper<Article> qw = new QueryWrapper<>();
+        return articleMapper.selectList(qw);
+    }
+
+    public Integer getUidByArticleId(Integer articleId){
+        QueryWrapper<UserOtmArticle> uOAqw = new QueryWrapper<>();
+        uOAqw.eq("article_Id",articleId);
+        UserOtmArticle userOtmArticle = userOtmArticleMapper.selectOne(uOAqw);
+        if(userOtmArticle!=null){
+            return userOtmArticle.getUid();
+        }
+        return null;
     }
 }
